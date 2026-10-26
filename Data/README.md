@@ -6,6 +6,7 @@ This folder provides:
 1. Sourced baseline quantities, emissions factors, and unit costs for the three required non-overlapping sectors (`oil`, `electricity`, `transport`).
 2. Sourced UNEP 2026 benchmark anchors (2025=100, 2030=82, 2035=55) and interpolated annual data.
 3. An automated CSV importer and validation test suite.
+4. Historical national SDG 13 observations from `Goal13.xlsx`, exposed separately from the area scenario.
 
 ---
 
@@ -19,6 +20,10 @@ This folder provides:
 | `import-csv.js` | Node script to compile `baseline-sectors.csv` into `scenario-data.js`. |
 | `data.test.js` | Automated validation test suite (zero external dependencies). |
 | `SOURCES.md` | In-depth citations, methodology, emissions factor references, and boundary rules. |
+| `Goal13.xlsx` | Source workbook containing SDG 13 country observations. |
+| `import-goal13.py` | Standard-library Python extractor for three checked workbook series. |
+| `goal13-context.js` | Generated browser/Node dataset of historical national emissions and disaster rates. |
+| `evaluate-goal13.js` | One-year holdout comparison of simple national GHG references. |
 
 ---
 
@@ -101,4 +106,8 @@ To run both the Engine and Data tests together:
 ```bash
 node --test Engine/engine.test.js Data/data.test.js
 ```
-All 8 tests will execute in less than 150ms without installing any external npm packages.
+The tests require no external npm packages. To regenerate the workbook extract after replacing `Goal13.xlsx`, run `python3 Data/import-goal13.py`. The extractor checks the workbook's columns, units, and series row counts; review any changed counts before updating those checks. The output records the source workbook SHA-256 hash.
+
+The extracted GHG observations are national totals in Mt CO₂e without land use and forestry for 2020–2022. They provide historical context only. The area simulator calculates CO₂ from illustrative 2025 oil, electricity, and transport activity and cannot infer those local inputs or validate a 2030/2035 prediction from the national series. Disaster-affected rates are separately labeled historical context and are never treated as health benefits from a slider change.
+
+Run `node Data/evaluate-goal13.js` to see a limited holdout check: use 2020–2021 to estimate each country's 2022 GHG total, then compare with the observed 2022 value. For the 89 countries with complete series, the median absolute percentage error is about 3.95% for an unchanged 2021 value versus 6.18% for a straight-line extrapolation. Even the better one-year reference does not establish accuracy for 2030/2035 or a user-defined area, so neither is silently applied to the scenario calculation.

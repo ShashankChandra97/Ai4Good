@@ -54,21 +54,31 @@
 
   /** Load the team's Data file through a classic script, so file:// works without a server. */
   function loadData() {
-    if (root.CLIMATE_DATA) return Promise.resolve(datasetOrThrow(root.CLIMATE_DATA));
+    if (root.CLIMATE_DATA && root.CLIMATE_GOAL13) {
+      root.CLIMATE_DATA.goal13 = root.CLIMATE_GOAL13;
+      return Promise.resolve(datasetOrThrow(root.CLIMATE_DATA));
+    }
     if (loadingData) return loadingData;
     if (typeof document === 'undefined') {
       return Promise.reject(new Error('Browser data loading requires a document. Pass a dataset to simulate() in Node.'));
     }
-    loadingData = new Promise((resolve, reject) => {
+    const loadScript = filename => new Promise((resolve, reject) => {
       const script = document.createElement('script');
-      script.src = new URL('../Data/scenario-data.js', engineScriptUrl || document.baseURI).href;
-      script.onload = () => {
-        try { resolve(datasetOrThrow(root.CLIMATE_DATA)); }
-        catch (error) { reject(error); }
-      };
-      script.onerror = () => reject(new Error('Could not load Data/scenario-data.js. Check that the Data team has added it.'));
+      script.src = new URL(`../Data/${filename}`, engineScriptUrl || document.baseURI).href;
+      script.onload = resolve;
+      script.onerror = () => reject(new Error(`Could not load Data/${filename}.`));
       document.head.appendChild(script);
-    }).catch(error => {
+    });
+    loadingData = (async () => {
+      if (!root.CLIMATE_DATA) await loadScript('scenario-data.js');
+      const selected = datasetOrThrow(root.CLIMATE_DATA);
+      if (!root.CLIMATE_GOAL13) await loadScript('goal13-context.js');
+      if (!root.CLIMATE_GOAL13?.countries?.length) {
+        throw new Error('Data/goal13-context.js has no country observations.');
+      }
+      selected.goal13 = root.CLIMATE_GOAL13;
+      return selected;
+    })().catch(error => {
       loadingData = null;
       throw error;
     });
@@ -167,6 +177,27 @@
     const status = gapIndexPoints < -STATUS_TOLERANCE ? 'ahead'
       : gapIndexPoints > STATUS_TOLERANCE ? 'behind' : 'on';
     const anyReduction = combinedAnnualPercent > 0 || sectorNames.some(key => sectors[key].reductionPercent > 0);
+    let goal13Context = null;
+    if (input.referenceCountryCode) {
+      const context = data.goal13 || root.CLIMATE_GOAL13;
+      if (!context?.countries) throw new Error('Goal 13 country observations are not loaded.');
+      const country = context.countries.find(item => item.code === String(input.referenceCountryCode));
+      if (!country) throw new Error(`No Goal 13 observations for country code ${input.referenceCountryCode}.`);
+      const observations = country.emissions.map(point => ({ ...point }));
+      const first = observations.find(point => point.year === 2020);
+      const last = observations.find(point => point.year === 2022);
+      goal13Context = {
+        countryCode: country.code,
+        countryName: country.name,
+        source: context.source,
+        indicator: context.indicators.emissions,
+        historicalEmissionsMtCO2e: observations,
+        observedChange2020to2022Percent: first && last && first.mtCO2e > 0
+          ? (last.mtCO2e / first.mtCO2e - 1) * 100 : null,
+        latestDirectlyAffectedPer100k: country.directlyAffected ? { ...country.directlyAffected } : null,
+        interpretation: 'Historical national GHG and disaster observations provide context only. They are not area measurements, projections, or health benefits caused by these sliders.'
+      };
+    }
 
     return {
       areaName: input.areaName?.trim() || data.areaName || 'User-defined area',
@@ -204,6 +235,7 @@
           : 'No activity reduction is selected. Local health outcomes are not estimated.',
         dataNeeded: 'Quantified health outcomes require local air quality changes, exposed population, baseline disease rates, and a health impact model.'
       },
+      goal13Context,
       insight: status === 'behind'
         ? 'The modeled emissions index is above the illustrative benchmark. Try larger reductions in oil, electricity, or transport.'
         : status === 'ahead'

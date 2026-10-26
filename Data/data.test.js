@@ -2,6 +2,19 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const engine = require('../Engine/engine.js');
 const scenarioData = require('./scenario-data.js');
+const goal13 = require('./goal13-context.js');
+const { createHash } = require('node:crypto');
+const { readFileSync } = require('node:fs');
+const path = require('node:path');
+
+test('Goal 13 browser extract matches the source workbook and expected coverage', () => {
+  const workbookHash = createHash('sha256').update(readFileSync(path.join(__dirname, 'Goal13.xlsx'))).digest('hex');
+  assert.equal(goal13.sha256, workbookHash, 'Regenerate goal13-context.js after updating Goal13.xlsx');
+  const observations = goal13.countries.flatMap(country => country.emissions);
+  assert.equal(observations.length, 286);
+  assert.equal(goal13.countries.filter(country => country.emissions.length).length, 99);
+  assert.equal(observations.filter(point => point.year === 2022).length, 90);
+});
 
 test('Data contract conforms strictly to Engine requirements', () => {
   assert.equal(scenarioData.baselineYear, 2025, 'baselineYear must be 2025');

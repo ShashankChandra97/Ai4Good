@@ -4,14 +4,14 @@
 
 Climate Action Lab is a small, local web dashboard for a university **AI for Good / UN SDG 13: Climate Action** presentation. A visitor defines an area's annual oil, electricity, and transport activity, moves percentage sliders, and sees how the selected changes affect modeled CO₂ emissions and spending through 2030 or 2035. The dashboard also explains possible health relevance without pretending to calculate illnesses avoided.
 
-This is a **transparent scenario simulator**, not a trained AI model, an observed emissions database, or an official forecast. The purpose is to help people explore assumptions and compare outcomes. The core application is intended to run from VS Code or by opening a local HTML file in a browser. It uses HTML, CSS, and vanilla JavaScript, with no backend, packages, API keys, or paid services.
+This is a **transparent scenario simulator**, not a trained AI model or an official forecast. It now includes historical national observations from `Data/Goal13.xlsx` for context. Those observations do not calibrate the user-defined area's 2025 activity or predict its future emissions. The core application runs from VS Code or by opening a local HTML file in a browser. It uses HTML, CSS, and vanilla JavaScript, with no backend, packages, API keys, or paid services.
 
 ## Current state — October 26, 2026
 
 | Area | Owner | Status |
 | --- | --- | --- |
-| `Engine/` | Shashank Chandra | Calculation engine, handoff document, and four passing tests are committed. |
-| `Data/` | Data teammate | `Data/scenario-data.js`, CSV inputs, importer, source notes, and tests are present. The area baseline values are illustrative until tied to a measured location. |
+| `Engine/` | Shashank Chandra | Calculation engine, handoff document, and Goal 13 context integration are present. |
+| `Data/` | Data teammate | Scenario inputs and a reproducible extraction of Goal 13 country observations are present. Area baseline values remain illustrative. |
 | `UI/` | UI teammate | `UI/index.html` contains a small Engine test dashboard on `engine`; the UI teammate can replace or adapt it for the final design. |
 | `README.md` | Shared project log | Records decisions and every prompt from Shashank Chandra in this chat, signed with his name. |
 
@@ -22,8 +22,8 @@ The repository is [ShashankChandra97/Ai4Good](https://github.com/ShashankChandra
 1. Enter or choose a **user-defined area** and its baseline annual activity quantities.
 2. Move percentage sliders for oil consumption, electricity consumption, and transport activity. There are also sliders for a general annual reduction rate (0–10%) and a policy boost (0–4%); these two rates add in percentage points before compounding.
 3. Switch the target year between 2030 and 2035. The Engine also accepts any integer year from 2026 through 2035.
-4. See projected annual CO₂, change from the 2025 normalized index, gap to the benchmark, a chart of both pathways, estimated gross spending avoided, and a qualified health-impact explanation.
-5. Read the assumptions and input sources behind the numbers. Reset and preset controls were proposed in the original brief, but the UI team has not implemented them. Preset values have not been agreed.
+4. See projected annual CO₂, change from the 2025 normalized index, gap to the benchmark, a chart of both pathways, estimated gross spending avoided, and a qualified health-impact explanation. Optionally select a country to inspect measured Goal 13 history alongside the scenario.
+5. Read the assumptions and input sources behind the numbers. The sample dashboard has a reset button. Preset values for the final UI have not been agreed.
 
 The dashboard must label simulated values as estimates. In particular, an index of 100 means **2025 activity-derived emissions set to 100**, not 100 tonnes or 100 gigatonnes.
 
@@ -38,6 +38,10 @@ The dashboard must label simulated values as estimates. In particular, an index 
 | `Data/baseline-sectors.csv` | Editable CSV spreadsheet for sector baseline activity and sources. |
 | `Data/benchmark-data.csv` | UNEP 2026 benchmark anchors and illustrative linear interpolations (2025–2035). |
 | `Data/import-csv.js` | Compiles `baseline-sectors.csv` into `scenario-data.js`. |
+| `Data/Goal13.xlsx` | Source workbook of country-level SDG 13 observations. |
+| `Data/import-goal13.py` | Extracts selected indicators from the workbook with Python's standard library and validates units, layout, and row counts. |
+| `Data/goal13-context.js` | Browser-ready, generated historical country context. |
+| `Data/evaluate-goal13.js` | Reproducible one-year holdout check for national GHG references. |
 | `Data/README.md` and `Data/SOURCES.md` | Data contract, methodology, and source notes. |
 | `UI/index.html` | Sample Engine test dashboard on `engine`. Loads Data through the Engine and renders metrics, chart, and raw JSON; the UI teammate owns the final design. |
 | `README.md` | Short overview and signed prompt log. |
@@ -46,11 +50,12 @@ The dashboard must label simulated values as estimates. In particular, an index 
 
 ```text
 UI/index.html → Engine/engine.js → Data/scenario-data.js
-     sliders       loadData(), simulate()   quantities and factors
-     chart    ←   totals, sectors, pathway  ← sourced inputs
+     sliders       loadData(), simulate()   example area quantities and factors
+     chart    ←   totals, sectors, pathway
+  country selector → Data/goal13-context.js ← Data/Goal13.xlsx
 ```
 
-The UI should load `../Engine/engine.js`, call `await ClimateEngine.loadData()`, then call `ClimateEngine.simulate(input)` whenever a control changes. `loadData()` inserts a classic script from `Data/scenario-data.js`, which is compatible with opening the HTML file directly through `file://`. The Engine can also receive a dataset as the second argument to `simulate()` for tests.
+The UI should load `../Engine/engine.js`, call `await ClimateEngine.loadData()`, then call `ClimateEngine.simulate(input)` whenever a control changes. `loadData()` inserts classic scripts from `Data/scenario-data.js` and `Data/goal13-context.js`, which are compatible with opening the HTML file directly through `file://`. The Engine can also receive a dataset as the second argument to `simulate()` for tests.
 
 A typical input is:
 
@@ -61,11 +66,12 @@ const result = ClimateEngine.simulate({
   annualReductionPercent: 0,
   policyBoostPercent: 0,
   sectorReductions: { oil: 1, electricity: 0, transport: 0 },
-  baselines: { oil: 1000 } // optional override, in the Data file's oil unit
+  baselines: { oil: 1000 }, // optional override, in the Data file's oil unit
+  referenceCountryCode: '840' // optional historical US context; not an area calibration
 });
 ```
 
-The Engine returns `sectors` with per-sector projected and avoided annual quantities; `totals` with baseline/projected/avoided CO₂, money, indices, gap, and `ahead`/`behind`/`on` status; `pathway` for the chart; `health` with a qualitative message; and `assumptions` for disclosure. Values are unrounded so the UI can choose suitable display precision. See [Engine/README.md](Engine/README.md) for the full call and Data example.
+The Engine returns `sectors` with per-sector projected and avoided annual quantities; `totals` with baseline/projected/avoided CO₂, money, indices, gap, and `ahead`/`behind`/`on` status; `pathway` for the chart; `health` with a qualitative message; `goal13Context` with selected historical national observations; and `assumptions` for disclosure. Values are unrounded so the UI can choose suitable display precision. See [Engine/README.md](Engine/README.md) for the full call and Data example.
 
 ## Data the Engine requires
 
@@ -92,17 +98,22 @@ The scenario index is `100 × projected annual CO₂ / baseline annual CO₂`. I
 
 **Scope caveat:** UNEP's benchmark is for *global greenhouse gases*, while this prototype sums CO₂ estimates for three activities in one user-defined area. The comparison is an educational index analogy. It does not establish whether that area is actually on an official SDG, Paris Agreement, or UNEP-compliant pathway.
 
+`Goal13.xlsx` contains 22,623 data rows across 40 series. The selected national GHG series (`EN_ATM_GHGT_WOLU`) has 286 observations across 99 countries for 2020–2022, with only 90 countries reporting a 2022 value. The generated context also retains each country's latest reported disaster-affected rate (`VC_DSR_DAFF`) for a separately labeled historical view. These country-level data cannot determine a user-defined area's 2025 oil, electricity, or transport use; emission factors; energy prices; or causal health effects. Three years of national GHG figures are too sparse for a validated 2030/2035 forecast. The scenario output remains conditional on the activity inputs and slider assumptions, not a data-trained prediction. The workbook's national GHG totals use CO₂ equivalents for multiple gases; the area calculation uses CO₂ only, so their absolute totals must not be combined or directly compared.
+
+An illustrative holdout check across 89 countries with complete 2020–2022 GHG series predicts 2022 from the previous two years. The median absolute percentage error is 3.95% when holding 2021 emissions constant, versus 6.18% for a straight-line trend. Run `node Data/evaluate-goal13.js` to reproduce this result. That single held-out year does not validate either method as a long-term forecast; the dashboard therefore does not silently extrapolate national history through 2030 or 2035.
+
 Reduced fossil fuel use may reduce harmful air pollution, as described by [WHO](https://www.who.int/publications/i/item/B09460). This Engine does **not** calculate cases of illness avoided or the monetary value of health benefits. Those outcomes require local air-quality changes, population exposure, baseline health rates, and a suitable impact model such as the methodology described by [EPA BenMAP](https://www.epa.gov/benmap).
 
 ## Run and verify
 
-The Engine tests can run now from the repository root:
+The Engine and Data tests can run from the repository root:
 
 ```sh
-node --test Engine/engine.test.js
+node --test Engine/engine.test.js Data/data.test.js
+python3 Data/import-goal13.py
 ```
 
-The sample test dashboard on `engine` can be opened now by opening `UI/index.html` in a browser from VS Code. It should work without Live Server. It loads `Data/scenario-data.js`; if that file is absent or invalid, it labels and uses built-in synthetic values. Move the sliders and switch between 2030 and 2035 to inspect metrics, the chart, and the raw Engine response. The current Data file represents an example area, so it should not be described as measured local activity. Repeat the checks when the Data teammate supplies a measured area dataset and the UI teammate supplies the final design.
+The sample test dashboard on `engine` can be opened by opening `UI/index.html` in a browser from VS Code. It should work without Live Server. It loads both generated Data scripts; if either is absent or invalid, it labels and uses built-in synthetic values. Move the sliders, switch between 2030 and 2035, and select a country to inspect the metrics, historical Goal 13 context, chart, and raw Engine response. The current area Data file remains an example, so it should not be described as measured local activity.
 
 ## Current model review
 

@@ -41,6 +41,9 @@
       <input id="areaName" type="text" value="Test area">
       <label for="targetYear">Target year</label>
       <select id="targetYear"><option value="2030">2030</option><option value="2035">2035</option></select>
+      <label for="referenceCountry">Goal 13 country reference</label>
+      <select id="referenceCountry"><option value="">No country selected</option></select>
+      <p class="note">Country observations provide historical context. They do not set this area's activity or predict its future emissions.</p>
       <fieldset>
         <legend>2025 annual activity</legend>
         <p class="note">Enter quantities in the units shown.</p>
@@ -90,6 +93,12 @@
         <p id="healthSummary"></p>
         <p class="note">This test page does not calculate illnesses avoided.</p>
       </section>
+      <section class="panel">
+        <h2>Observed Goal 13 data</h2>
+        <p id="goal13Summary">Choose a country reference to view historical observations.</p>
+        <p id="goal13Disaster" class="note"></p>
+        <p class="note">Source: Data/Goal13.xlsx. National greenhouse gases are in Mt CO₂e, excluding land use and forestry. These are historical observations, not a forecast or a measured baseline for the user-defined area.</p>
+      </section>
       <details class="panel">
         <summary>Raw Engine response for debugging</summary>
         <pre id="rawOutput"></pre>
@@ -116,6 +125,7 @@
     function reset() {
       el('areaName').value = data.areaName || 'Test area';
       el('targetYear').value = '2030';
+      el('referenceCountry').value = data.goal13?.countries.some(country => country.code === '840') ? '840' : '';
       for (const name of names) {
         el(name + 'Baseline').value = data.sectors[name].baselineAnnualQuantity;
         el(name + 'Unit').textContent = data.sectors[name].unit;
@@ -155,6 +165,7 @@
           targetYear: Number(el('targetYear').value),
           annualReductionPercent: Number(el('annualReduction').value),
           policyBoostPercent: Number(el('policyBoost').value),
+          referenceCountryCode: el('referenceCountry').value || undefined,
           sectorReductions: reductions, baselines
         }, data);
         el('error').hidden = true;
@@ -169,6 +180,23 @@
             ' by ' + number(Math.abs(result.totals.gapIndexPoints)) + ' index points.');
         el('insight').textContent = result.insight;
         el('healthSummary').textContent = result.health.summary;
+        if (result.goal13Context) {
+          const context = result.goal13Context;
+          const observations = context.historicalEmissionsMtCO2e.map(point =>
+            point.year + ': ' + number(point.mtCO2e) + ' Mt CO₂e').join(' · ');
+          const change = context.observedChange2020to2022Percent;
+          el('goal13Summary').textContent = context.countryName + ' recorded ' + observations +
+            (change == null ? '.' : '. Observed 2020–2022 change: ' +
+              (change >= 0 ? '+' : '') + number(change) + '%.');
+          const affected = context.latestDirectlyAffectedPer100k;
+          el('goal13Disaster').textContent = affected
+            ? 'Separately, reported disaster-affected people in ' + affected.year + ': ' +
+              number(affected.per100k) + ' per 100,000 people. This is not an estimated effect of the scenario.'
+            : 'No disaster-affected rate is available for this country in the workbook.';
+        } else {
+          el('goal13Summary').textContent = 'Choose a country reference to view historical observations.';
+          el('goal13Disaster').textContent = '';
+        }
         el('rawOutput').textContent = JSON.stringify(result, null, 2);
         el('chart').setAttribute('aria-label', 'Scenario index ' + number(result.totals.scenarioIndex) +
           ' and benchmark ' + number(result.totals.benchmarkIndex) + ' in ' + result.targetYear);
@@ -176,7 +204,7 @@
       } catch (error) {
         el('error').hidden = false;
         el('error').textContent = error.message;
-        ['projectedCO2', 'avoidedCO2', 'moneySaved', 'indices', 'statusText', 'insight', 'healthSummary'].forEach(id => {
+        ['projectedCO2', 'avoidedCO2', 'moneySaved', 'indices', 'statusText', 'insight', 'healthSummary', 'goal13Summary', 'goal13Disaster'].forEach(id => {
           el(id).textContent = '—';
         });
         el('chart').replaceChildren();
@@ -189,7 +217,10 @@
     el('resetButton').addEventListener('click', reset);
     ClimateEngine.loadData().then(loaded => {
       data = loaded;
-      el('dataMode').textContent = 'Using Data/scenario-data.js. These are representative example-area inputs; check Data/SOURCES.md before presenting them as local measurements.';
+      for (const country of loaded.goal13.countries.filter(country => country.emissions.length)) {
+        el('referenceCountry').add(new Option(country.name, country.code));
+      }
+      el('dataMode').textContent = 'Using Data/scenario-data.js for illustrative area inputs and Data/Goal13.xlsx for observed country context. See Data/SOURCES.md for scope and limitations.';
       reset();
     }).catch(error => {
       el('dataMode').textContent = 'Using synthetic sample data. Data/scenario-data.js is unavailable or invalid: ' + error.message;
