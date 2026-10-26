@@ -1,0 +1,4 @@
+sector,unit,baselineAnnualQuantity,kgCO2PerUnit,costPerUnit,description,source
+oil,litres/year,120000,2.68,1.15,"Stationary heating oil and facility backup generators (strictly non-transport)","EPA GHG Emission Factors Hub (Distillate Fuel Oil No. 2, 2.68 kg CO2/L); EIA Heating Oil Prices"
+electricity,kWh/year,850000,0.37,0.14,"Grid electricity consumption for academic, residential, and facility buildings","EPA eGRID US National Average (~0.37 kg CO2/kWh); EIA Commercial/Residential average rate ($0.14/kWh)"
+transport,km/year,650000,0.17,0.22,"Campus fleet vehicles and commuter passenger vehicle travel","EPA GHG Emission Factors Hub (Passenger Vehicle average ~0.17 kg CO2/km); Bureau of Transportation Statistics"

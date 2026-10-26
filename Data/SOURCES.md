@@ -1,0 +1,91 @@
+# Climate Action Lab — Data Sources and Methodology
+
+This document details all data sources, emissions factors, benchmark definitions, and boundary conditions used in the Climate Action Lab scenario simulator.
+
+---
+
+## 1. Normalized Benchmark Anchors (UNEP SDG 13 Context)
+
+The simulator evaluates emissions pathways against illustrative benchmarks derived from international climate targets:
+
+| Anchor Year | Normalized Index | % Change from 2025 Baseline | Status / Category | Primary Reference |
+| :--- | :--- | :--- | :--- | :--- |
+| **2025** | **100.0** | 0.0% | Baseline Anchor | Base year activity index = 100 |
+| **2030** | **82.0** | -18.0% | Paris / SDG 13 Target Anchor | [UNEP Emissions Gap Report 2026](https://www.unep.org/) |
+| **2035** | **55.0** | -45.0% | Mid-Term Benchmark Anchor | [UNEP Emissions Gap Report 2026](https://www.unep.org/) |
+
+### Interpolation Methodology
+- **Anchor Years (2025, 2030, 2035)** are drawn directly from the UNEP Emissions Gap Report reduction targets.
+- **Intervening Years (2026–2029 and 2031–2034)** are calculated using **linear interpolation**:
+  $$\text{Index}_y = \text{Index}_{y_0} + (\text{Index}_{y_1} - \text{Index}_{y_0}) \times \frac{y - y_0}{y_1 - y_0}$$
+- **Important Disclosure**: Intervening years are **illustrative mathematical interpolations**, not official annual emissions milestones or binding treaty commitments.
+
+---
+
+## 2. Sector Baseline Activities and Emissions Factors
+
+The baseline dataset models a representative **Metro Campus & Community Area** (or institutional municipal district). The three sectors are defined with strict non-overlapping boundaries.
+
+### Sector 1: Oil (`oil`)
+- **Activity Definition**: Stationary facility heating oil and emergency backup generation. Strictly excludes vehicle propulsion fuels to avoid double-counting.
+- **Baseline Annual Quantity**: 120,000 litres/year
+- **Emissions Factor**: `2.68 kg CO₂ / litre`
+  - *Source*: U.S. Environmental Protection Agency (EPA) GHG Emission Factors Hub (Distillate Fuel Oil No. 2: ~10.21 kg CO₂/gallon = ~2.69 kg CO₂/L).
+- **Unit Cost**: `$1.15 / litre`
+  - *Source*: U.S. Energy Information Administration (EIA) Residential and Commercial Heating Oil Price Averages.
+
+### Sector 2: Electricity (`electricity`)
+- **Activity Definition**: Purchased grid electricity for lighting, climate control, data centers, and academic/commercial buildings.
+- **Baseline Annual Quantity**: 850,000 kWh/year
+- **Emissions Factor**: `0.37 kg CO₂ / kWh`
+  - *Source*: EPA eGRID (Emissions & Generation Resource Integrated Database), U.S. National Average Grid Gross Loss Equivalent Factor (~818 lbs CO₂/MWh = ~0.371 kg CO₂/kWh).
+- **Unit Cost**: `$0.14 / kWh`
+  - *Source*: EIA Average Retail Price of Electricity (Commercial / Mixed Institutional rate).
+
+### Sector 3: Transport (`transport`)
+- **Activity Definition**: Fleet vehicles and commuter passenger transit activity.
+- **Baseline Annual Quantity**: 650,000 km/year
+- **Emissions Factor**: `0.17 kg CO₂ / km`
+  - *Source*: EPA GHG Emission Factors Hub (Average Passenger Car / Light Duty Vehicle: ~0.171 kg CO₂/km = ~0.275 kg CO₂/mile).
+- **Unit Cost**: `$0.22 / km`
+  - *Source*: Bureau of Transportation Statistics (BTS) / AAA Average Vehicle Operating Cost (fuel, maintenance, wear per km).
+
+---
+
+## 3. Boundary Conditions & Non-Overlapping Rules
+
+To preserve scientific and mathematical integrity:
+1. **No Double-Counting**:
+   - Liquid fuels used in transport (gasoline, diesel) are accounted for **only** in the transport sector (measured in `km/year`).
+   - The oil sector covers **only** stationary heating/combustion.
+   - Electric vehicles (if charged via campus grid) are either attributed to transport or electricity; default transport emissions assume conventional vehicle fleet mileage.
+2. **Normalized Index Semantics**:
+   - The baseline index value of 100 represents the total 2025 activity-derived CO₂ emissions for the modeled area.
+   - It **does not mean 100 tonnes or 100 gigatonnes**.
+3. **Constant Emission Factors and Costs**:
+   - Calculations assume fixed unit costs and constant grid emissions intensity over the simulation timeframe.
+   - The model intentionally excludes macroeconomic inflation, discounting rates, capital expenditure costs for renewable transitions, and secondary rebound effects.
+4. **Health Benefit Scope**:
+   - While combustion reductions decrease co-emitted criteria air pollutants ($PM_{2.5}$, $NO_x$, $SO_2$), the simulator does not calculate avoided illnesses, mortality, or health cost savings.
+   - Quantitative health estimation requires localized dispersion modeling, population census distributions, baseline health statistics, and epidemiological tools such as [EPA BenMAP](https://www.epa.gov/benmap) and [WHO Air Quality Guidelines](https://www.who.int/publications/i/item/B09460).
+
+---
+
+## 4. Authoritative Citations & References
+
+1. **United Nations Sustainable Development Goal 13**:
+   - *Target 13.2*: Integrate climate change measures into national policies, strategies and planning.
+   - *Indicator 13.2.2*: Total greenhouse gas emissions per year.
+   - URL: [https://sdgs.un.org/goals/goal13](https://sdgs.un.org/goals/goal13) | [Metadata](https://unstats.un.org/sdgs/metadata/?Goal=13&Target=13.2)
+2. **UNEP Emissions Gap Report 2026**:
+   - Global mitigation pathways and emissions gap analysis toward 2030 (18% reduction) and 2035 (45% reduction).
+   - URL: [https://www.unep.org/](https://www.unep.org/)
+3. **U.S. EPA Greenhouse Gas Emission Factors Hub**:
+   - Carbon emission coefficients for stationary and mobile combustion sources.
+   - URL: [https://www.epa.gov/climateleadership/ghg-emission-factors-hub](https://www.epa.gov/climateleadership/ghg-emission-factors-hub)
+4. **U.S. EPA eGRID**:
+   - Annual power plant emissions and grid mix factors.
+   - URL: [https://www.epa.gov/egrid](https://www.epa.gov/egrid)
+5. **U.S. Energy Information Administration (EIA)**:
+   - State and national energy cost statistics.
+   - URL: [https://www.eia.gov/](https://www.eia.gov/)

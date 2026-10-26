@@ -189,7 +189,7 @@
     el('resetButton').addEventListener('click', reset);
     ClimateEngine.loadData().then(loaded => {
       data = loaded;
-      el('dataMode').textContent = 'Using Data/scenario-data.js from the Data folder.';
+      el('dataMode').textContent = 'Using Data/scenario-data.js. These are representative example-area inputs; check Data/SOURCES.md before presenting them as local measurements.';
       reset();
     }).catch(error => {
       el('dataMode').textContent = 'Using synthetic sample data. Data/scenario-data.js is unavailable or invalid: ' + error.message;

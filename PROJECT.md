@@ -11,11 +11,11 @@ This is a **transparent scenario simulator**, not a trained AI model, an observe
 | Area | Owner | Status |
 | --- | --- | --- |
 | `Engine/` | Shashank Chandra | Calculation engine, handoff document, and four passing tests are committed. |
-| `Data/` | Data teammate | `Data/data` is an empty placeholder. The required `Data/scenario-data.js` has not been added. |
-| `UI/` | UI teammate | `UI/index.html` now contains a small Engine test dashboard on the `engine` branch; the UI teammate can replace or adapt it for the final design. |
+| `Data/` | Data teammate | `Data/scenario-data.js`, CSV inputs, importer, source notes, and tests are present. The area baseline values are illustrative until tied to a measured location. |
+| `UI/` | UI teammate | `UI/index.html` contains a small Engine test dashboard on `engine`; the UI teammate can replace or adapt it for the final design. |
 | `README.md` | Shared project log | Records decisions and every prompt from Shashank Chandra in this chat, signed with his name. |
 
-The repository is [ShashankChandra97/Ai4Good](https://github.com/ShashankChandra97/Ai4Good). Existing work was pushed to `main`. The team now develops on separate branches: `engine` for Engine work, `Data` for data work, and `UI-Design` for UI work. Folder ownership still applies. On `engine`, a sample dashboard runs with synthetic values while the Data file is missing; it must not be presented as sourced climate evidence.
+The repository is [ShashankChandra97/Ai4Good](https://github.com/ShashankChandra97/Ai4Good). Existing work was pushed to `main`. The team develops on separate branches: `engine`, `Data`, and `UI-Design`. The `engine` branch now contains the Data module and a sample dashboard, so the integration can be tested locally. The final UI and a measured area dataset are still pending.
 
 ## Intended user experience
 
@@ -34,8 +34,12 @@ The dashboard must label simulated values as estimates. In particular, an index 
 | `Engine/engine.js` | Validates the Data object, loads it in the browser, calculates scenario outputs and benchmark series. Exposes `window.ClimateEngine`. |
 | `Engine/engine.test.js` | Dependency-free Node tests for the main calculation, 2035 benchmark, missing prices, and invalid data. |
 | `Engine/README.md` | Detailed Data schema and UI integration example. |
-| `Data/scenario-data.js` | **To be supplied by Data teammate.** A classic script assigning `window.CLIMATE_DATA`. |
-| `UI/index.html` | Sample Engine test dashboard on `engine`. Loads the Engine, shows controls, metrics, chart, and raw JSON; the UI teammate owns the final design. |
+| `Data/scenario-data.js` | Assigns `window.CLIMATE_DATA` with representative baseline quantities, emission factors, and unit prices. |
+| `Data/baseline-sectors.csv` | Editable CSV spreadsheet for sector baseline activity and sources. |
+| `Data/benchmark-data.csv` | UNEP 2026 benchmark anchors and illustrative linear interpolations (2025–2035). |
+| `Data/import-csv.js` | Compiles `baseline-sectors.csv` into `scenario-data.js`. |
+| `Data/README.md` and `Data/SOURCES.md` | Data contract, methodology, and source notes. |
+| `UI/index.html` | Sample Engine test dashboard on `engine`. Loads Data through the Engine and renders metrics, chart, and raw JSON; the UI teammate owns the final design. |
 | `README.md` | Short overview and signed prompt log. |
 
 ## How the pieces connect
@@ -98,11 +102,11 @@ The Engine tests can run now from the repository root:
 node --test Engine/engine.test.js
 ```
 
-The sample test dashboard on `engine` can be opened now by opening `UI/index.html` in a browser from VS Code. It should work without Live Server. It tries `Data/scenario-data.js` first; if that file is absent or invalid, it clearly labels its built-in values as synthetic. Move the sliders and switch between 2030 and 2035 to inspect metrics, the chart, and the raw Engine response. Once the Data and final UI files are added, repeat those checks with sourced inputs, including reset/presets if included and laptop/narrow-screen layouts. The integrated final dashboard has not yet been verified.
+The sample test dashboard on `engine` can be opened now by opening `UI/index.html` in a browser from VS Code. It should work without Live Server. It loads `Data/scenario-data.js`; if that file is absent or invalid, it labels and uses built-in synthetic values. Move the sliders and switch between 2030 and 2035 to inspect metrics, the chart, and the raw Engine response. The current Data file represents an example area, so it should not be described as measured local activity. Repeat the checks when the Data teammate supplies a measured area dataset and the UI teammate supplies the final design.
 
 ## Current model review
 
-The Engine is useful as a transparent teaching simulator, but the built-in UI numbers are synthetic test values. Before presenting area-specific benefits, the Data team must supply documented 2025 activity quantities, CO₂ factors, and unit prices. The UI should always show whether it is using sample or sourced data.
+The Engine is useful as a transparent teaching simulator. The built-in UI fallback is synthetic, and the merged Data file models a representative example area with approximate factors and prices. Its 2025 annual quantities are not tied to a documented real location. Before presenting area-specific benefits, the Data team must supply measured or otherwise defensible area quantities and precise factor and price sources. The UI should identify which dataset is active.
 
 Recommended next changes, in priority order:
 
