@@ -102,3 +102,9 @@ Every prompt Shashank Chandra sends in this project chat is recorded here, with 
 > try rebasing the code from the ui branch, there are some updates 
 
 — Shashank Chandra
+
+### Prompt 11
+
+> So explain how this model works and give suggesting for this current ones.
+
+— Shashank Chandra

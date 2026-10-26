@@ -100,6 +100,18 @@ node --test Engine/engine.test.js
 
 The sample test dashboard on `engine` can be opened now by opening `UI/index.html` in a browser from VS Code. It should work without Live Server. It tries `Data/scenario-data.js` first; if that file is absent or invalid, it clearly labels its built-in values as synthetic. Move the sliders and switch between 2030 and 2035 to inspect metrics, the chart, and the raw Engine response. Once the Data and final UI files are added, repeat those checks with sourced inputs, including reset/presets if included and laptop/narrow-screen layouts. The integrated final dashboard has not yet been verified.
 
+## Current model review
+
+The Engine is useful as a transparent teaching simulator, but the built-in UI numbers are synthetic test values. Before presenting area-specific benefits, the Data team must supply documented 2025 activity quantities, CO₂ factors, and unit prices. The UI should always show whether it is using sample or sourced data.
+
+Recommended next changes, in priority order:
+
+1. Define three non-overlapping activity buckets. In particular, oil used by transport must not also appear in the oil sector total.
+2. Label the UNEP line as a **global reference**, not an official target for the chosen area. The current area index is based on CO₂ from three activities; UNEP's benchmark concerns global greenhouse gases.
+3. Show the calculation behind each benefit: units avoided, kg CO₂ per unit, and cost per unit. Distinguish gross spending avoided from net savings after any implementation cost.
+4. Make recommendations specific to the modeled inputs, such as showing which one-percentage-point sector change gives the largest modeled CO₂ reduction. Do not attach unsupported impact numbers to named policies.
+5. Keep health effects qualitative until the project has local air-quality changes, exposed population, baseline health rates, and an appropriate health-impact function. [EPA's BenMAP explanation](https://www.epa.gov/benmap/how-benmap-ce-estimates-health-and-economic-effects-air-pollution) describes these inputs.
+
 ## Working agreement
 
 - Work on your assigned branch (`engine`, `Data`, or `UI-Design`) and in the folder you own. Bring in changes from `main` before integrating work, review the combined result, and then merge into `main` through the team's review process.
