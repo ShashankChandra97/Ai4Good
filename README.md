@@ -6,7 +6,7 @@ A local, browser-based climate scenario simulator for a class project. The team 
 - `UI/` — interface and chart
 - `Data/` — benchmark data and source notes
 
-The Engine, a test dashboard in `UI/index.html`, and the Data module are available on `engine`. The Data module uses a representative example area; its annual quantities should not be presented as measured local activity. The dashboard also shows selected historical country observations extracted from `Data/Goal13.xlsx`. Read [PROJECT.md](PROJECT.md) for the full project context and [Engine/README.md](Engine/README.md) for the integration contract.
+The latest UI team dashboard is in `UI/index.html`. The area-level Engine test dashboard remains available at `UI/engine-test.html`, with oil, electricity, and transport sliders and historical country observations extracted from `Data/Goal13.xlsx`. The Data module uses a representative example area; its annual quantities should not be presented as measured local activity. Read [PROJECT.md](PROJECT.md) for the full project context and [Engine/README.md](Engine/README.md) for the integration contract.
 
 ## Agreed direction
 
@@ -129,5 +129,11 @@ Every prompt Shashank Chandra sends in this project chat is recorded here, with 
 ### Prompt 14
 
 > its goal13.xlsx in the data folder.
+
+— Shashank Chandra
+
+### Prompt 15
+
+> there is a new UI file from the UI branch that has the latest code, grab that as well.
 
 — Shashank Chandra

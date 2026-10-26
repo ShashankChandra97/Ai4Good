@@ -12,10 +12,10 @@ This is a **transparent scenario simulator**, not a trained AI model or an offic
 | --- | --- | --- |
 | `Engine/` | Shashank Chandra | Calculation engine, handoff document, and Goal 13 context integration are present. |
 | `Data/` | Data teammate | Scenario inputs and a reproducible extraction of Goal 13 country observations are present. Area baseline values remain illustrative. |
-| `UI/` | UI teammate | `UI/index.html` contains a small Engine test dashboard on `engine`; the UI teammate can replace or adapt it for the final design. |
+| `UI/` | UI teammate | The latest `UI-Design` dashboard is in `UI/index.html`. The earlier Engine integration test remains at `UI/engine-test.html`. |
 | `README.md` | Shared project log | Records decisions and every prompt from Shashank Chandra in this chat, signed with his name. |
 
-The repository is [ShashankChandra97/Ai4Good](https://github.com/ShashankChandra97/Ai4Good). Existing work was pushed to `main`. The team develops on separate branches: `engine`, `Data`, and `UI-Design`. The `engine` branch now contains the Data module and a sample dashboard, so the integration can be tested locally. The final UI and a measured area dataset are still pending.
+The repository is [ShashankChandra97/Ai4Good](https://github.com/ShashankChandra97/Ai4Good). Existing work was pushed to `main`. The team develops on separate branches: `engine`, `Data`, and `UI-Design`. The `engine` branch now contains the latest UI branch files, the Data module, and a separate Engine test dashboard. A measured area dataset and a unified UI/Engine model are still pending.
 
 ## Intended user experience
 
@@ -23,7 +23,7 @@ The repository is [ShashankChandra97/Ai4Good](https://github.com/ShashankChandra
 2. Move percentage sliders for oil consumption, electricity consumption, and transport activity. There are also sliders for a general annual reduction rate (0–10%) and a policy boost (0–4%); these two rates add in percentage points before compounding.
 3. Switch the target year between 2030 and 2035. The Engine also accepts any integer year from 2026 through 2035.
 4. See projected annual CO₂, change from the 2025 normalized index, gap to the benchmark, a chart of both pathways, estimated gross spending avoided, and a qualified health-impact explanation. Optionally select a country to inspect measured Goal 13 history alongside the scenario.
-5. Read the assumptions and input sources behind the numbers. The sample dashboard has a reset button. Preset values for the final UI have not been agreed.
+5. Read the assumptions and input sources behind the numbers. The area test dashboard has a reset button. The UI team's global dashboard has its own presets, which currently apply to its separate global model.
 
 The dashboard must label simulated values as estimates. In particular, an index of 100 means **2025 activity-derived emissions set to 100**, not 100 tonnes or 100 gigatonnes.
 
@@ -43,19 +43,23 @@ The dashboard must label simulated values as estimates. In particular, an index 
 | `Data/goal13-context.js` | Browser-ready, generated historical country context. |
 | `Data/evaluate-goal13.js` | Reproducible one-year holdout check for national GHG references. |
 | `Data/README.md` and `Data/SOURCES.md` | Data contract, methodology, and source notes. |
-| `UI/index.html` | Sample Engine test dashboard on `engine`. Loads Data through the Engine and renders metrics, chart, and raw JSON; the UI teammate owns the final design. |
+| `UI/index.html` | Latest dashboard from `UI-Design`: global/country emissions, industry breakdown, learning tools, and its own embedded historical dataset and calculations. |
+| `UI/engine-test.html` | Separate area-level Engine test page. Loads the Data scripts through the Engine and renders sliders, metrics, chart, Goal 13 context, and raw JSON. |
+| `UI/README.md` and `UI/benchmark-data.csv` | UI-team documentation and benchmark table brought from `UI-Design`. |
 | `README.md` | Short overview and signed prompt log. |
 
 ## How the pieces connect
 
 ```text
-UI/index.html → Engine/engine.js → Data/scenario-data.js
+UI/engine-test.html → Engine/engine.js → Data/scenario-data.js
      sliders       loadData(), simulate()   example area quantities and factors
      chart    ←   totals, sectors, pathway
   country selector → Data/goal13-context.js ← Data/Goal13.xlsx
+
+UI/index.html → embedded global/country and industry data → separate UI-team model
 ```
 
-The UI should load `../Engine/engine.js`, call `await ClimateEngine.loadData()`, then call `ClimateEngine.simulate(input)` whenever a control changes. `loadData()` inserts classic scripts from `Data/scenario-data.js` and `Data/goal13-context.js`, which are compatible with opening the HTML file directly through `file://`. The Engine can also receive a dataset as the second argument to `simulate()` for tests.
+The area test page loads `../Engine/engine.js`, calls `await ClimateEngine.loadData()`, then calls `ClimateEngine.simulate(input)` whenever a control changes. `loadData()` inserts classic scripts from `Data/scenario-data.js` and `Data/goal13-context.js`, which are compatible with opening the HTML file directly through `file://`. The Engine can also receive a dataset as the second argument to `simulate()` for tests. The new main UI currently uses its own global/country GHG model and embedded data; it does not call `ClimateEngine`, and its absolute Mt CO₂e figures must not be treated as the area Engine's kg CO₂ outputs. Both pages link to each other for testing.
 
 A typical input is:
 
@@ -113,7 +117,7 @@ node --test Engine/engine.test.js Data/data.test.js
 python3 Data/import-goal13.py
 ```
 
-The sample test dashboard on `engine` can be opened by opening `UI/index.html` in a browser from VS Code. It should work without Live Server. It loads both generated Data scripts; if either is absent or invalid, it labels and uses built-in synthetic values. Move the sliders, switch between 2030 and 2035, and select a country to inspect the metrics, historical Goal 13 context, chart, and raw Engine response. The current area Data file remains an example, so it should not be described as measured local activity.
+Open `UI/index.html` in a browser from VS Code for the latest UI team's global dashboard. Its data and calculations are embedded, so the page opens as a local file. Use its header link to open `UI/engine-test.html` for the area Engine and Goal 13 workbook integration. The test page loads both generated Data scripts; if either is absent or invalid, it labels and uses built-in synthetic values. Move its sliders, switch between 2030 and 2035, and select a country to inspect metrics, historical Goal 13 context, chart, and raw Engine response. The current area Data file remains an example, so it should not be described as measured local activity.
 
 ## Current model review
 
