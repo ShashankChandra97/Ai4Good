@@ -15,7 +15,7 @@ This is a **transparent scenario simulator**, not a trained AI model, an observe
 | `UI/` | UI teammate | `UI/index.html` is an empty placeholder. Dashboard controls and chart have not been built. |
 | `README.md` | Shared project log | Records decisions and every prompt from Shashank Chandra in this chat, signed with his name. |
 
-The repository is [ShashankChandra97/Ai4Good](https://github.com/ShashankChandra97/Ai4Good). The team agreed to use the shared `main` branch and divide work by folder. A dashboard cannot run yet because the UI and Data files are still placeholders.
+The repository is [ShashankChandra97/Ai4Good](https://github.com/ShashankChandra97/Ai4Good). Existing work was pushed to `main`. The team now develops on separate branches: `engine` for Engine work, `Data` for data work, and `UI-Design` for UI work. Folder ownership still applies. A dashboard cannot run yet because the UI and Data files are still placeholders.
 
 ## Intended user experience
 
@@ -102,7 +102,7 @@ Once the Data and UI teammates have added their files, open `UI/index.html` in a
 
 ## Working agreement
 
-- Work on the shared `main` branch in the folder you own. Check the latest state before committing and avoid overwriting another teammate's files.
+- Work on your assigned branch (`engine`, `Data`, or `UI-Design`) and in the folder you own. Bring in changes from `main` before integrating work, review the combined result, and then merge into `main` through the team's review process.
 - Keep source notes beside the Data inputs and keep the UI's displayed units and labels consistent with those inputs.
-- Keep `README.md` as the signed prompt log for every new Shashank Chandra prompt in this project chat.
+- Keep `README.md` as the signed prompt log for every new Shashank Chandra prompt in this project chat. New entries made on `engine` will appear on `main` after that branch is merged.
 - Update this document when decisions, file names, or interfaces change so a new teammate can understand the current project without reading the chat.

@@ -1,6 +1,6 @@
 # Climate Action Lab
 
-A local, browser-based climate scenario simulator for a class project. The team is collaborating in one GitHub repository using assigned folders:
+A local, browser-based climate scenario simulator for a class project. The team is collaborating in one GitHub repository using separate branches and assigned folders:
 
 - `Engine/` — scenario calculations and recommendation rules (Shashank Chandra)
 - `UI/` — interface and chart
@@ -82,5 +82,11 @@ Every prompt Shashank Chandra sends in this project chat is recorded here, with 
 ### Prompt 7
 
 > also create a project md file that contains all the information about this project so that others can find it easy to understand the coed with a context,
+
+— Shashank Chandra
+
+### Prompt 8
+
+> we are using branches now, to prevent merge conflicts so use the branch I jsut created after pushing the existing stuff to the main branch.
 
 — Shashank Chandra
