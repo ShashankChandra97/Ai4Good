@@ -501,6 +501,38 @@ input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius
 .tour-btns { display: flex; gap: 8px; }
 [hidden] { display: none !important; }
 
+/* ===== User-defined area simulator ===== */
+.area-grid { display: grid; grid-template-columns: 350px minmax(0, 1fr); gap: var(--gap); align-items: start; }
+.area-panel { padding: 18px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--panel-raised); }
+.area-panel h3 { font-size: 0.98rem; margin: 0 0 12px; }
+.area-fields { display: grid; gap: 12px; }
+.area-field { display: grid; gap: 5px; font-size: 0.86rem; font-weight: 600; }
+.area-field input, .area-field select { width: 100%; min-width: 0; padding: 9px 11px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--panel); color: var(--text); font: inherit; }
+.area-field input:focus-visible, .area-field select:focus-visible { outline: 2px solid var(--scenario); outline-offset: 2px; }
+.area-field small { font-size: 0.76rem; font-weight: 400; color: var(--text-muted); }
+.area-controls { margin: 0; padding: 0; border: 0; min-width: 0; }
+.area-controls:disabled { opacity: 0.6; }
+.area-controls .control { margin-top: 16px; }
+.area-controls .reset-btn { margin-top: 18px; }
+.area-results { display: grid; gap: 14px; min-width: 0; }
+.area-results .kpi-grid { gap: 10px; }
+.area-results .kpi { padding: 14px; }
+.area-results .kpi-value { font-size: 1.5rem; overflow-wrap: anywhere; }
+.area-results .kpi-help { line-height: 1.4; }
+.area-results .verdict { padding: 14px 16px; display: block; }
+.area-results .verdict-text { font-size: 0.9rem; }
+.area-chart { display: block; width: 100%; height: auto; }
+.area-table-wrap { overflow-x: auto; }
+.area-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; font-variant-numeric: tabular-nums; }
+.area-table th, .area-table td { padding: 9px 8px; border-bottom: 1px solid var(--border); text-align: right; white-space: nowrap; }
+.area-table th:first-child, .area-table td:first-child { text-align: left; }
+.area-table th { color: var(--text-muted); font-weight: 600; }
+.area-note { margin: 8px 0 0; font-size: 0.8rem; line-height: 1.5; color: var(--text-muted); }
+.area-debug { overflow: hidden; }
+.area-debug summary { cursor: pointer; font-weight: 600; }
+.area-debug pre { max-height: 280px; overflow: auto; font-size: 0.75rem; }
+.area-error { color: var(--behind); font-weight: 600; }
+
 /* ===== Responsive ===== */
 @media (max-width: 1080px) {
   .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -511,6 +543,7 @@ input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius
   .act-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .exec-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .geo-grid { grid-template-columns: minmax(0, 1fr); }
+  .area-grid { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 720px) {
   .about-grid, .partner-grid, .path-steps { grid-template-columns: minmax(0, 1fr); }
@@ -531,6 +564,7 @@ input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius
   .verdict { padding: 14px 16px; }
   .act-grid { grid-template-columns: minmax(0, 1fr); }
   .btn-tour-label { display: none; }
+  .area-results .kpi-grid { grid-template-columns: minmax(0, 1fr); }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -561,7 +595,7 @@ input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius
       </div>
     </div>
     <div class="header-actions">
-      <a class="btn" href="engine-test.html">Area simulator test</a>
+      <a class="btn" href="#area-simulator">Model your area</a>
       <button type="button" class="btn btn-primary" id="tourBtn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m16 8-2 6-6 2 2-6z"/></svg>
         <span class="btn-tour-label">Take the tour</span><span class="sr-only">Take the guided tour</span>
@@ -776,6 +810,57 @@ input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius
       </p>
     </section>
   </div>
+
+  <!-- ===== User-defined area simulator ===== -->
+  <section class="card" id="area-simulator" aria-labelledby="areaTitle">
+    <div class="section-head">
+      <div>
+        <p class="section-kicker">Explore a local scenario</p>
+        <h2 id="areaTitle" class="card-title">What would a change in your area save?</h2>
+      </div>
+      <p class="muted small" style="margin:0;max-width:430px">Set annual activity, then move a percentage slider. These local CO₂ estimates use the Engine and Data folder; the global dashboard above uses a separate model.</p>
+    </div>
+    <p id="areaDataStatus" class="area-note" role="status">Loading example area and Goal 13 data…</p>
+    <div class="area-grid" style="margin-top:16px">
+      <div class="area-panel">
+        <h3>Area inputs</h3>
+        <fieldset class="area-controls" id="areaControls" disabled>
+          <div class="area-fields">
+            <label class="area-field" for="areaName">Area name<input id="areaName" type="text" maxlength="80" autocomplete="off"></label>
+            <label class="area-field" for="areaYear">Compare in<select id="areaYear"><option value="2030">2030</option><option value="2035">2035</option></select></label>
+            <label class="area-field" for="areaCountry">Historical country context<select id="areaCountry"><option value="">None</option></select><small>This does not set your area's baseline.</small></label>
+          </div>
+          <h3 style="margin-top:22px">2025 annual activity</h3>
+          <div class="area-fields">
+            <label class="area-field" for="areaOilBaseline">Stationary oil <small id="areaOilUnit"></small><input id="areaOilBaseline" type="number" min="0" step="any" required></label>
+            <label class="area-field" for="areaElectricityBaseline">Grid electricity <small id="areaElectricityUnit"></small><input id="areaElectricityBaseline" type="number" min="0" step="any" required></label>
+            <label class="area-field" for="areaTransportBaseline">Vehicle travel <small id="areaTransportUnit"></small><input id="areaTransportBaseline" type="number" min="0" step="any" required></label>
+          </div>
+          <h3 style="margin-top:22px">Percentage changes</h3>
+          <div class="control"><div class="control-head"><label for="areaOilReduction">Oil use</label><output id="areaOilReductionValue" for="areaOilReduction">1%</output></div><input id="areaOilReduction" type="range" min="0" max="10" step="0.1" value="1"><div class="scale"><span>0%</span><span>10%</span></div></div>
+          <div class="control"><div class="control-head"><label for="areaElectricityReduction">Electricity use</label><output id="areaElectricityReductionValue" for="areaElectricityReduction">0%</output></div><input id="areaElectricityReduction" type="range" min="0" max="10" step="0.1" value="0"><div class="scale"><span>0%</span><span>10%</span></div></div>
+          <div class="control"><div class="control-head"><label for="areaTransportReduction">Vehicle travel</label><output id="areaTransportReductionValue" for="areaTransportReduction">0%</output></div><input id="areaTransportReduction" type="range" min="0" max="10" step="0.1" value="0"><div class="scale"><span>0%</span><span>10%</span></div></div>
+          <div class="control"><div class="control-head"><label for="areaAnnualReduction">Annual reduction</label><output id="areaAnnualReductionValue" for="areaAnnualReduction">0%</output></div><input id="areaAnnualReduction" type="range" min="0" max="10" step="0.1" value="0"><div class="scale"><span>0%</span><span>10%</span></div></div>
+          <div class="control"><div class="control-head"><label for="areaPolicyBoost">Policy boost</label><output id="areaPolicyBoostValue" for="areaPolicyBoost">0%</output></div><input id="areaPolicyBoost" type="range" min="0" max="4" step="0.1" value="0"><div class="scale"><span>0%</span><span>4%</span></div><p class="control-help">Added to the annual rate and compounded; hypothetical, not an evaluated policy.</p></div>
+          <button type="button" class="reset-btn" id="areaReset">Reset example</button>
+        </fieldset>
+      </div>
+      <div class="area-results">
+        <div class="kpi-grid" aria-live="polite">
+          <div class="area-panel kpi"><h3 class="kpi-label">Projected annual CO₂</h3><p class="kpi-value" id="areaProjected">—</p><p class="kpi-help">In selected year · kg CO₂</p></div>
+          <div class="area-panel kpi"><h3 class="kpi-label">Annual CO₂ avoided</h3><p class="kpi-value good" id="areaAvoided">—</p><p class="kpi-help">Versus flat 2025 activity · kg CO₂</p></div>
+          <div class="area-panel kpi"><h3 class="kpi-label">Gross spending avoided</h3><p class="kpi-value good" id="areaMoney">—</p><p class="kpi-help">Annual · before implementation costs</p></div>
+          <div class="area-panel kpi"><h3 class="kpi-label">Scenario / reference</h3><p class="kpi-value" id="areaIndices">—</p><p class="kpi-help">2025 = 100 · global reference is illustrative here</p></div>
+        </div>
+        <p id="areaError" class="area-error" role="alert" hidden></p>
+        <div class="verdict" id="areaVerdict"><div class="verdict-top"><span class="status-pill" id="areaStatus">Awaiting data</span></div><p class="verdict-text" id="areaInsight">Move the sliders to explore a scenario.</p></div>
+        <div class="area-panel"><div class="chart-head"><h3 class="card-title">Your area pathway</h3><ul class="legend" aria-label="Area chart legend"><li><span class="swatch swatch-scenario"></span>Area scenario</li><li><span class="swatch swatch-benchmark"></span>Global reference</li></ul></div><svg class="area-chart" id="areaChart" viewBox="0 0 700 290" role="img" aria-label="Area emissions index and global reference pathway"></svg><p class="chart-caption">Index: 2025 = 100. The UNEP global GHG anchors are 82 in 2030 and 55 in 2035. The line between anchors is illustrative. This is a CO₂ scenario for three local activities, not an official area target.</p></div>
+        <div class="area-panel"><h3>Where the benefits come from</h3><div class="area-table-wrap"><table class="area-table"><thead><tr><th scope="col">Activity</th><th scope="col">2025 / yr</th><th scope="col">Avoided / yr</th><th scope="col">kg CO₂ avoided</th><th scope="col">Gross spending avoided</th></tr></thead><tbody id="areaSectorRows"></tbody></table></div><p class="area-note">Activity buckets must not overlap. Factors and unit prices come from <code>Data/scenario-data.js</code>; example baseline quantities are illustrative.</p></div>
+        <div class="area-panel"><h3>Health and Goal 13 context</h3><p id="areaHealth" class="area-note">—</p><p id="areaGoal13" class="area-note">—</p><p id="areaDisaster" class="area-note"></p><p class="area-note">National observations from <code>Data/Goal13.xlsx</code> are historical GHG totals in Mt CO₂e. They do not measure this area, predict 2030 or 2035, or quantify health outcomes.</p></div>
+        <details class="area-panel area-debug"><summary>Engine response for backend testing</summary><pre id="areaRaw">—</pre><p class="area-note"><a href="engine-test.html">Open standalone Engine test page</a></p></details>
+      </div>
+    </div>
+  </section>
 
   <!-- ===== Geographic drill-down ===== -->
   <section class="card" id="geo" aria-labelledby="geoTitle">
@@ -1970,5 +2055,7 @@ input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius
   update();
 })();
 </script>
+<script src="../Engine/engine.js"></script>
+<script src="area-simulator.js"></script>
 </body>
 </html>

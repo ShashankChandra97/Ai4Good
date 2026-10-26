@@ -6,7 +6,7 @@ A local, browser-based climate scenario simulator for a class project. The team 
 - `UI/` — interface and chart
 - `Data/` — benchmark data and source notes
 
-The latest UI team dashboard is in `UI/index.html`. The area-level Engine test dashboard remains available at `UI/engine-test.html`, with oil, electricity, and transport sliders and historical country observations extracted from `Data/Goal13.xlsx`. The Data module uses a representative example area; its annual quantities should not be presented as measured local activity. Read [PROJECT.md](PROJECT.md) for the full project context and [Engine/README.md](Engine/README.md) for the integration contract.
+The latest UI team dashboard is in `UI/index.html`. Its **Model your area** section now runs the shared Engine with oil, electricity, and transport sliders and historical country observations extracted from `Data/Goal13.xlsx`. The standalone `UI/engine-test.html` remains for backend debugging. The Data module uses a representative example area; its annual quantities should not be presented as measured local activity. Read [PROJECT.md](PROJECT.md) for the full project context and [Engine/README.md](Engine/README.md) for the integration contract.
 
 The integrated dashboard is currently on the `engine` branch. GitHub's default `main` branch still has the earlier page until the team merges the branches. The original UI team's version is on `UI-Design`.
 
@@ -143,5 +143,11 @@ Every prompt Shashank Chandra sends in this project chat is recorded here, with 
 ### Prompt 16
 
 > why is the latest html page not gathered from the UI-Design branch
+
+— Shashank Chandra
+
+### Prompt 17
+
+> Go ahead and ugrade the Area simulator test UI code and integrate it into the main page and match the design elements.
 
 — Shashank Chandra

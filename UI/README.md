@@ -5,15 +5,9 @@ wants to act on the goal. It shows where greenhouse gas emissions are (by countr
 user-defined reduction scenario, quantifies the environmental impact in tonnes, and generates data-driven
 recommendations.
 
-**One file, no setup:** everything (styles, code and data) lives in `index.html`, so it works offline when
-double-clicked. (Earlier versions loaded `styles.css` and `script.js`; if the HTML was opened without them it showed
-plain text. Those files are no longer used and can be deleted.)
+**Open locally, no build setup:** the global dashboard's styles, code, and data live in `index.html`. The integrated area simulator additionally loads `area-simulator.js`, `../Engine/engine.js`, and the Engine's Data scripts. Keep the repository folders together when opening `index.html`, including through `file://`.
 
-The team also keeps `engine-test.html` as a separate area-level Engine test dashboard. It loads `../Engine/engine.js`,
-`../Data/scenario-data.js`, and `../Data/goal13-context.js` from the repository and supports oil, electricity, and
-transport sliders. The main `index.html` is the UI team's global/country dashboard with its own embedded data and
-model; its values should not be interpreted as the Engine's user-defined-area results. Use the header link to switch
-between them. Integrating both models into one view will require an explicit data and unit mapping.
+The main page now includes a **Model your area** section using `ClimateEngine.simulate()` and Data folder inputs. It offers editable 2025 activity, oil/electricity/transport percentage sliders, annual and policy sliders, 2030/2035, an area pathway, sector benefit breakdown, qualitative health context, historical Goal 13 observations, and a raw Engine response. The global/country dashboard above it still uses its own embedded data and model. Its Mt CO₂e geography results are separate from the area Engine's kg CO₂ results. `engine-test.html` remains available from the area section for backend debugging.
 
 ## Run locally
 1. Open the `climate-action-lab` folder in VS Code (**File → Open Folder**).
@@ -24,6 +18,7 @@ between them. Integrating both models into one view will require an explicit dat
 - **Executive summary** for investors and management: world emissions, the cut needed, the remaining gap under your
   scenario, and the industry with the biggest gap. Updates live.
 - **Scenario simulator** (global index, 2025 = 100): reduction rate, target year, policy boost, presets, reset, SVG chart.
+- **Area simulator** (Engine-backed): local activity inputs, five percentage sliders, 2030/2035, CO₂ and gross spending estimates, sector detail, global reference index, and Goal 13 history.
 - **Geographic drill-down:** world → continent → country, plus a search box. Each view includes:
   - a statistical trend: log-linear regression with a 95% confidence interval and R², flagged when weak;
   - environmental impact in MtCO₂e: trend projection, your scenario, target-aligned level, gap, and cumulative
