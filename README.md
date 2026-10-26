@@ -8,6 +8,8 @@ A local, browser-based climate scenario simulator for a class project. The team 
 
 The latest UI team dashboard is in `UI/index.html`. The area-level Engine test dashboard remains available at `UI/engine-test.html`, with oil, electricity, and transport sliders and historical country observations extracted from `Data/Goal13.xlsx`. The Data module uses a representative example area; its annual quantities should not be presented as measured local activity. Read [PROJECT.md](PROJECT.md) for the full project context and [Engine/README.md](Engine/README.md) for the integration contract.
 
+The integrated dashboard is currently on the `engine` branch. GitHub's default `main` branch still has the earlier page until the team merges the branches. The original UI team's version is on `UI-Design`.
+
 ## Agreed direction
 
 - Build a dashboard with a simulator for a user-defined area. Include percentage sliders for oil, electricity, and transport consumption.
@@ -135,5 +137,11 @@ Every prompt Shashank Chandra sends in this project chat is recorded here, with 
 ### Prompt 15
 
 > there is a new UI file from the UI branch that has the latest code, grab that as well.
+
+— Shashank Chandra
+
+### Prompt 16
+
+> why is the latest html page not gathered from the UI-Design branch
 
 — Shashank Chandra
