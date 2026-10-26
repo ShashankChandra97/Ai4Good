@@ -1,3 +1,12 @@
+Contributions:
+
+Shashank: The engine 
+Geneveive : The data 
+Quynh : The UI 
+
+All of them seperated by folders.
+
+
 # Climate Action Lab
 
 An interactive decision-support tool for **UN SDG 13: Climate Action**, built for investors, managers and anyone who
