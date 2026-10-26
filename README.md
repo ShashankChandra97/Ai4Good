@@ -1,12 +1,14 @@
 # Climate Action Lab
 
-A local, browser-based climate scenario simulator for a class project. The team is collaborating in one GitHub repository using assigned folders:
+A local, browser-based climate scenario simulator for a class project. The team is collaborating in one GitHub repository using separate branches and assigned folders:
 
 - `Engine/` — scenario calculations and recommendation rules (Shashank Chandra)
 - `UI/` — interface and chart
 - `Data/` — benchmark data and source notes
 
-The Engine is implemented; `UI/index.html` and `Data/data` are still empty placeholders. Read [PROJECT.md](PROJECT.md) for the full project context and [Engine/README.md](Engine/README.md) for the integration contract.
+The latest UI team dashboard is in `UI/index.html`. Its **Model your area** section now runs the shared Engine with oil, electricity, and transport sliders and historical country observations extracted from `Data/Goal13.xlsx`. The standalone `UI/engine-test.html` remains for backend debugging. The Data module uses a representative example area; its annual quantities should not be presented as measured local activity. Read [PROJECT.md](PROJECT.md) for the full project context and [Engine/README.md](Engine/README.md) for the integration contract.
+
+The integrated dashboard is currently on the `engine` branch. GitHub's default `main` branch still has the earlier page until the team merges the branches. The original UI team's version is on `UI-Design`.
 
 ## Agreed direction
 
@@ -82,5 +84,76 @@ Every prompt Shashank Chandra sends in this project chat is recorded here, with 
 ### Prompt 7
 
 > also create a project md file that contains all the information about this project so that others can find it easy to understand the coed with a context,
+
+— Shashank Chandra
+
+### Prompt 8
+
+> we are using branches now, to prevent merge conflicts so use the branch I jsut created after pushing the existing stuff to the main branch.
+
+— Shashank Chandra
+
+### Prompt 9
+
+> Give me the sample ui in the index so that I can test stuff as a backend engineer.
+
+— Shashank Chandra
+
+### Prompt 10
+
+> try rebasing the code from the ui branch, there are some updates 
+
+— Shashank Chandra
+
+### Prompt 11
+
+> So explain how this model works and give suggesting for this current ones.
+
+— Shashank Chandra
+
+### Prompt 12
+
+> pull the latest changes from the Data branch
+
+— Shashank Chandra
+
+### Prompt 13
+
+> The model shoykd use goal12.xlsx
+>
+> This contains the data that is needed for this poject
+>
+> You must use that data to reenforce model and the predections must work well.
+> Think well and look for areas that this data helps with this project.
+
+— Shashank Chandra
+
+### Prompt 14
+
+> its goal13.xlsx in the data folder.
+
+— Shashank Chandra
+
+### Prompt 15
+
+> there is a new UI file from the UI branch that has the latest code, grab that as well.
+
+— Shashank Chandra
+
+### Prompt 16
+
+> why is the latest html page not gathered from the UI-Design branch
+
+— Shashank Chandra
+
+### Prompt 17
+
+> Go ahead and ugrade the Area simulator test UI code and integrate it into the main page and match the design elements.
+
+— Shashank Chandra
+
+### Prompt 18
+
+> check if everything is pushed to the main branch ?
 
 — Shashank Chandra

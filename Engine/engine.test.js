@@ -1,6 +1,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const engine = require('./engine.js');
+const goal13 = require('../Data/goal13-context.js');
 
 const data = {
   areaName: 'Example area',
@@ -50,4 +51,17 @@ test('invalid or missing data is rejected instead of returning invented impacts'
   assert.throws(() => engine.simulate({ targetYear: 2030 }), /Climate data is missing/);
   assert.throws(() => engine.simulate({ targetYear: 2036 }, data), /targetYear/);
   assert.throws(() => engine.simulate({ sectorReductions: { oil: 101 } }, data), /sectorReductions.oil/);
+});
+
+test('Goal 13 observations stay historical context and do not change area scenario math', () => {
+  const withContext = { ...data, goal13 };
+  const input = { targetYear: 2035, sectorReductions: { oil: 1 } };
+  const plain = engine.simulate(input, data);
+  const observed = engine.simulate({ ...input, referenceCountryCode: '840' }, withContext);
+  assert.deepEqual(observed.totals, plain.totals);
+  assert.equal(observed.goal13Context.countryName, 'United States of America');
+  assert.deepEqual(observed.goal13Context.historicalEmissionsMtCO2e.map(point => point.year), [2020, 2021, 2022]);
+  assert.equal(observed.goal13Context.historicalEmissionsMtCO2e[2].mtCO2e, 6343.20933);
+  assert.equal(observed.goal13Context.latestDirectlyAffectedPer100k.year, 2021);
+  assert.throws(() => engine.simulate({ ...input, referenceCountryCode: '999999' }, withContext), /No Goal 13 observations/);
 });

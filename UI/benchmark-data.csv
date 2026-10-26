@@ -1,0 +1,12 @@
+year,benchmark_index,type,note
+2025,100,anchor,Baseline (normalized index; not gigatonnes)
+2026,96.4,interpolated,Linear interpolation for display only
+2027,92.8,interpolated,Linear interpolation for display only
+2028,89.2,interpolated,Linear interpolation for display only
+2029,85.6,interpolated,Linear interpolation for display only
+2030,82,anchor,UNEP EGR 2026: -18% vs 2025
+2031,76.6,interpolated,Linear interpolation for display only
+2032,71.2,interpolated,Linear interpolation for display only
+2033,65.8,interpolated,Linear interpolation for display only
+2034,60.4,interpolated,Linear interpolation for display only
+2035,55,anchor,UNEP EGR 2026: -45% vs 2025
