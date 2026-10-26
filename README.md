@@ -6,7 +6,7 @@ A local, browser-based climate scenario simulator for a class project. The team 
 - `UI/` — interface and chart
 - `Data/` — benchmark data and source notes
 
-The files in these folders are currently placeholders. The team has not chosen the exact interface between them yet.
+The Engine is implemented; `UI/index.html` and `Data/data` are still empty placeholders. Read [PROJECT.md](PROJECT.md) for the full project context and [Engine/README.md](Engine/README.md) for the integration contract.
 
 ## Agreed direction
 
@@ -76,5 +76,11 @@ Every prompt Shashank Chandra sends in this project chat is recorded here, with 
 ### Prompt 6
 
 > UNEP 2035 value: 55 (recommended)
+
+— Shashank Chandra
+
+### Prompt 7
+
+> also create a project md file that contains all the information about this project so that others can find it easy to understand the coed with a context,
 
 — Shashank Chandra
