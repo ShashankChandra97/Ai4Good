@@ -1,8 +1,8 @@
 Contributions:
 
 Shashank: The engine 
-Geneveive : The data 
-Quynh : The UI 
+| Geneveive : The data 
+| Quynh : The UI 
 
 All of them seperated by folders.
 
