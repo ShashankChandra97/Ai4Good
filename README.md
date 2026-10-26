@@ -1,5 +1,19 @@
 # Climate Action Lab
 
+## Launch the site
+
+1. Clone or download this repository, then open the project folder in VS Code. Keep `UI/`, `Engine/`, and `Data/` together.
+2. In the VS Code terminal, from the project root, run:
+
+   ```sh
+   python3 -m http.server 8000
+   ```
+
+   On Windows, use `py -m http.server 8000` if `python3` is unavailable.
+3. Open **http://localhost:8000/UI/index.html** in your browser. Use **Model your area** at the top of the page to jump to the local simulator. Stop the server with `Ctrl+C`.
+
+No installation or build step is required. You can also open `UI/index.html` directly in a browser from the downloaded project folder; the Engine and Data files must remain in their relative locations.
+
 A local, browser-based climate scenario simulator for a class project. The team is collaborating in one GitHub repository using separate branches and assigned folders:
 
 - `Engine/` — scenario calculations and recommendation rules (Shashank Chandra)
@@ -8,7 +22,7 @@ A local, browser-based climate scenario simulator for a class project. The team 
 
 The latest UI team dashboard is in `UI/index.html`. Its **Model your area** section now runs the shared Engine with oil, electricity, and transport sliders and historical country observations extracted from `Data/Goal13.xlsx`. The standalone `UI/engine-test.html` remains for backend debugging. The Data module uses a representative example area; its annual quantities should not be presented as measured local activity. Read [PROJECT.md](PROJECT.md) for the full project context and [Engine/README.md](Engine/README.md) for the integration contract.
 
-The integrated dashboard is currently on the `engine` branch. GitHub's default `main` branch still has the earlier page until the team merges the branches. The original UI team's version is on `UI-Design`.
+The integrated dashboard is now on `main` after the Engine pull request was merged. The team also has `engine`, `Data`, and `UI-Design` working branches.
 
 ## Agreed direction
 
@@ -155,5 +169,12 @@ Every prompt Shashank Chandra sends in this project chat is recorded here, with 
 ### Prompt 18
 
 > check if everything is pushed to the main branch ?
+
+— Shashank Chandra
+
+### Prompt 19
+
+> On the top of the read me file.
+> Add instructions to launch the site.
 
 — Shashank Chandra
