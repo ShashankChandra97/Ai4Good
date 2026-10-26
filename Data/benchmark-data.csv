@@ -1,0 +1,12 @@
+year,benchmark_index,reduction_from_2025_percent,is_report_anchor,interpolation_type,source_note
+2025,100.0,0.0,true,Report Baseline,"UNEP Emissions Gap Report 2026: Normalized baseline index = 100"
+2026,96.4,-3.6,false,Illustrative Linear Interpolation,"Interpolated between 2025 (100) and 2030 (82); not an official annual target"
+2027,92.8,-7.2,false,Illustrative Linear Interpolation,"Interpolated between 2025 (100) and 2030 (82); not an official annual target"
+2028,89.2,-10.8,false,Illustrative Linear Interpolation,"Interpolated between 2025 (100) and 2030 (82); not an official annual target"
+2029,85.6,-14.4,false,Illustrative Linear Interpolation,"Interpolated between 2025 (100) and 2030 (82); not an official annual target"
+2030,82.0,-18.0,true,Report Anchor,"UNEP Emissions Gap Report 2026: 18% reduction target relative to 2025"
+2031,76.6,-23.4,false,Illustrative Linear Interpolation,"Interpolated between 2030 (82) and 2035 (55); not an official annual target"
+2032,71.2,-28.8,false,Illustrative Linear Interpolation,"Interpolated between 2030 (82) and 2035 (55); not an official annual target"
+2033,65.8,-34.2,false,Illustrative Linear Interpolation,"Interpolated between 2030 (82) and 2035 (55); not an official annual target"
+2034,60.4,-39.6,false,Illustrative Linear Interpolation,"Interpolated between 2030 (82) and 2035 (55); not an official annual target"
+2035,55.0,-45.0,true,Report Anchor,"UNEP Emissions Gap Report 2026: 45% reduction target relative to 2025"

@@ -11,11 +11,11 @@ This is a **transparent scenario simulator**, not a trained AI model, an observe
 | Area | Owner | Status |
 | --- | --- | --- |
 | `Engine/` | Shashank Chandra | Calculation engine, handoff document, and four passing tests are committed. |
-| `Data/` | Data teammate | `Data/data` is an empty placeholder. The required `Data/scenario-data.js` has not been added. |
+| `Data/` | Data teammate | `Data/scenario-data.js`, CSV templates, importer, sources, and four passing tests are implemented. |
 | `UI/` | UI teammate | `UI/index.html` is an empty placeholder. Dashboard controls and chart have not been built. |
 | `README.md` | Shared project log | Records decisions and every prompt from Shashank Chandra in this chat, signed with his name. |
 
-The repository is [ShashankChandra97/Ai4Good](https://github.com/ShashankChandra97/Ai4Good). The team agreed to use the shared `main` branch and divide work by folder. A dashboard cannot run yet because the UI and Data files are still placeholders.
+The repository is [ShashankChandra97/Ai4Good](https://github.com/ShashankChandra97/Ai4Good). Work is divided across branches and folders. With `Engine/` and `Data/` implemented, the calculation pipeline is fully functional and ready for UI integration.
 
 ## Intended user experience
 
@@ -33,8 +33,10 @@ The dashboard must label simulated values as estimates. In particular, an index 
 | --- | --- |
 | `Engine/engine.js` | Validates the Data object, loads it in the browser, calculates scenario outputs and benchmark series. Exposes `window.ClimateEngine`. |
 | `Engine/engine.test.js` | Dependency-free Node tests for the main calculation, 2035 benchmark, missing prices, and invalid data. |
-| `Engine/README.md` | Detailed Data schema and UI integration example. |
-| `Data/scenario-data.js` | **To be supplied by Data teammate.** A classic script assigning `window.CLIMATE_DATA`. |
+| `Data/scenario-data.js` | Assigns `window.CLIMATE_DATA` with sourced baseline quantities, emission factors, and unit prices. |
+| `Data/baseline-sectors.csv` | Editable CSV spreadsheet for sector baseline activity and sources. |
+| `Data/benchmark-data.csv` | UNEP 2026 benchmark anchors and illustrative linear interpolations (2025–2035). |
+| `Data/import-csv.js` | Compiles `baseline-sectors.csv` into `scenario-data.js`. |
 | `UI/index.html` | **To be supplied by UI teammate.** Loads the Engine and renders its result. |
 | `README.md` | Short overview and signed prompt log. |
 
