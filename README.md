@@ -10,12 +10,13 @@ The files in these folders are currently placeholders. The team has not chosen t
 
 ## Agreed direction
 
-- Build a dashboard with a simulator for several area-level changes, including reduced oil consumption.
-- Let the user inspect both 2030 and 2035 outcomes.
+- Build a dashboard with a simulator for a user-defined area. Include percentage sliders for oil, electricity, and transport consumption.
+- Let the user inspect both 2030 and 2035 outcomes, using the 2026 UNEP report's 18% and 45% reduction benchmarks from the 2025 baseline.
 - Use percentage sliders for scenario changes.
 - Have the Engine read scenario inputs from `Data/`.
 - Combine an annual reduction rate and policy boost by adding their percentage points.
-- Label modeled benefits and disclose the assumptions and source data behind them.
+- Show modeled CO₂ and money benefits, plus a health-impact section. Do not claim numeric health outcomes without local air quality and population inputs.
+- See [Engine handoff](Engine/README.md) for the Data format, UI call, model assumptions, and test command.
 
 ## Prompt log
 
@@ -57,5 +58,23 @@ Every prompt Shashank Chandra sends in this project chat is recorded here, with 
 > Assuming that lets say, If one area were to reduce the consumtion of oil by 1% how much are the benifits.
 >
 > Similar simulations like such must be incorporated.
+
+— Shashank Chandra
+
+### Prompt 5
+
+> User-defined area (recommended)
+>
+> CO₂, money, and health impacts
+>
+> Electricity, transport, and oil (recommended)
+>
+> Extend the trend (recommended)
+
+— Shashank Chandra
+
+### Prompt 6
+
+> UNEP 2035 value: 55 (recommended)
 
 — Shashank Chandra
