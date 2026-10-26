@@ -96,3 +96,9 @@ Every prompt Shashank Chandra sends in this project chat is recorded here, with 
 > Give me the sample ui in the index so that I can test stuff as a backend engineer.
 
 — Shashank Chandra
+
+### Prompt 10
+
+> try rebasing the code from the ui branch, there are some updates 
+
+— Shashank Chandra
