@@ -6,7 +6,7 @@ A local, browser-based climate scenario simulator for a class project. The team 
 - `UI/` — interface and chart
 - `Data/` — benchmark data and source notes
 
-The Engine is implemented; `UI/index.html` and `Data/data` are still empty placeholders. Read [PROJECT.md](PROJECT.md) for the full project context and [Engine/README.md](Engine/README.md) for the integration contract.
+The Engine and a test dashboard in `UI/index.html` are implemented. The Data folder still has an empty placeholder; the test dashboard uses clearly labeled synthetic values until `Data/scenario-data.js` is supplied. Read [PROJECT.md](PROJECT.md) for the full project context and [Engine/README.md](Engine/README.md) for the integration contract.
 
 ## Agreed direction
 
@@ -88,5 +88,11 @@ Every prompt Shashank Chandra sends in this project chat is recorded here, with 
 ### Prompt 8
 
 > we are using branches now, to prevent merge conflicts so use the branch I jsut created after pushing the existing stuff to the main branch.
+
+— Shashank Chandra
+
+### Prompt 9
+
+> Give me the sample ui in the index so that I can test stuff as a backend engineer.
 
 — Shashank Chandra

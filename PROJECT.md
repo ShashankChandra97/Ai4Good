@@ -12,10 +12,10 @@ This is a **transparent scenario simulator**, not a trained AI model, an observe
 | --- | --- | --- |
 | `Engine/` | Shashank Chandra | Calculation engine, handoff document, and four passing tests are committed. |
 | `Data/` | Data teammate | `Data/data` is an empty placeholder. The required `Data/scenario-data.js` has not been added. |
-| `UI/` | UI teammate | `UI/index.html` is an empty placeholder. Dashboard controls and chart have not been built. |
+| `UI/` | UI teammate | `UI/index.html` now contains a small Engine test dashboard on the `engine` branch; the UI teammate can replace or adapt it for the final design. |
 | `README.md` | Shared project log | Records decisions and every prompt from Shashank Chandra in this chat, signed with his name. |
 
-The repository is [ShashankChandra97/Ai4Good](https://github.com/ShashankChandra97/Ai4Good). Existing work was pushed to `main`. The team now develops on separate branches: `engine` for Engine work, `Data` for data work, and `UI-Design` for UI work. Folder ownership still applies. A dashboard cannot run yet because the UI and Data files are still placeholders.
+The repository is [ShashankChandra97/Ai4Good](https://github.com/ShashankChandra97/Ai4Good). Existing work was pushed to `main`. The team now develops on separate branches: `engine` for Engine work, `Data` for data work, and `UI-Design` for UI work. Folder ownership still applies. On `engine`, a sample dashboard runs with synthetic values while the Data file is missing; it must not be presented as sourced climate evidence.
 
 ## Intended user experience
 
@@ -35,7 +35,7 @@ The dashboard must label simulated values as estimates. In particular, an index 
 | `Engine/engine.test.js` | Dependency-free Node tests for the main calculation, 2035 benchmark, missing prices, and invalid data. |
 | `Engine/README.md` | Detailed Data schema and UI integration example. |
 | `Data/scenario-data.js` | **To be supplied by Data teammate.** A classic script assigning `window.CLIMATE_DATA`. |
-| `UI/index.html` | **To be supplied by UI teammate.** Loads the Engine and renders its result. |
+| `UI/index.html` | Sample Engine test dashboard on `engine`. Loads the Engine, shows controls, metrics, chart, and raw JSON; the UI teammate owns the final design. |
 | `README.md` | Short overview and signed prompt log. |
 
 ## How the pieces connect
@@ -98,7 +98,7 @@ The Engine tests can run now from the repository root:
 node --test Engine/engine.test.js
 ```
 
-Once the Data and UI teammates have added their files, open `UI/index.html` in a browser from VS Code, or use VS Code Live Server if convenient. The app should work without Live Server. Check that every slider updates the metrics and chart, 2030/2035 selection changes the benchmark, input errors are visible to users, and reset/presets work if included. Also inspect laptop and narrow-screen layouts. These end-to-end checks cannot be completed until the remaining folders are implemented.
+The sample test dashboard on `engine` can be opened now by opening `UI/index.html` in a browser from VS Code. It should work without Live Server. It tries `Data/scenario-data.js` first; if that file is absent or invalid, it clearly labels its built-in values as synthetic. Move the sliders and switch between 2030 and 2035 to inspect metrics, the chart, and the raw Engine response. Once the Data and final UI files are added, repeat those checks with sourced inputs, including reset/presets if included and laptop/narrow-screen layouts. The integrated final dashboard has not yet been verified.
 
 ## Working agreement
 
