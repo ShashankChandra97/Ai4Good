@@ -151,3 +151,9 @@ Every prompt Shashank Chandra sends in this project chat is recorded here, with 
 > Go ahead and ugrade the Area simulator test UI code and integrate it into the main page and match the design elements.
 
 — Shashank Chandra
+
+### Prompt 18
+
+> check if everything is pushed to the main branch ?
+
+— Shashank Chandra
